@@ -22,6 +22,7 @@ router.get('/config', (req, res) => {
     event: config.event,
     packs: Object.fromEntries(Object.entries(config.packs).map(([k, p]) => [k, { price: p.price, distances: p.distances }])),
     shirtSizes: config.shirtSizes,
+    shirtDesign: config.shirtDesign,
     holdHours: config.holdHours,
     payments: {
       omise: omiseEnabled(), omisePublicKey: omiseEnabled() ? config.omise.publicKey : null,

@@ -78,7 +78,7 @@ const showErr = msg => { const e = $('#payErr'); e.textContent = msg; e.hidden =
 
 async function renderPromptpay() {
   const manual = cfg.payments.manualPromptpay;
-  $('#payBody').innerHTML = `<div class="pay"><div class="qrbox" id="qr"><span class="spinner" style="color:#59606D"></span></div>
+  $('#payBody').innerHTML = `<div class="pay"><div class="qrcol"><div class="qrbox" id="qr"><span class="spinner" style="color:#59606D"></span></div></div>
     <div style="display:grid;gap:10px;min-width:0">
       <ol style="margin:0;padding-left:20px;display:grid;gap:4px">
         <li>${L('Open your banking app and scan the QR code.', 'เปิดแอปธนาคารแล้วสแกน QR')}</li>
@@ -86,12 +86,14 @@ async function renderPromptpay() {
         <li>${manual ? L('After paying, tell us below so we can check it.', 'โอนแล้วแจ้งด้านล่าง') : L('This page updates by itself once the payment goes through.', 'หน้านี้จะอัปเดตเองเมื่อชำระสำเร็จ')}</li>
       </ol>
       ${manual ? `<div class="field"><label for="payNote">${L('Transfer time or last 4 digits of your account (optional)', 'เวลาโอน หรือเลขท้ายบัญชี 4 หลัก (ถ้ามี)')}</label><input type="text" id="payNote" maxlength="60"></div>
-        <div><button class="btn" type="button" id="claimBtn">${L('I\'ve transferred', 'โอนเงินแล้ว')}</button></div>`
+        <div><button class="btn wide-m" type="button" id="claimBtn">${L('I\'ve transferred', 'โอนเงินแล้ว')}</button></div>`
       : `<div class="kv"><span class="spinner"></span> ${L('Waiting for payment…', 'รอการชำระเงิน…')}</div>`}
     </div></div>`;
   try {
     if (!payState.qrUrl) payState = await api(`/api/registrations/${REF}/pay`, { body: { t: TOKEN, method: 'promptpay' } });
     $('#qr').innerHTML = `<img src="${esc(payState.qrUrl)}" alt="PromptPay QR code for ${fmt(reg.price)} THB" width="196" height="196">`;
+    $('#qr').insertAdjacentHTML('afterend', `<a class="btn ghost saveqr" href="${esc(payState.qrUrl)}" download="thonglor-run-${esc(reg.ref)}-promptpay.png">${L('Save QR to photos', 'บันทึก QR ลงเครื่อง')}</a>
+      <p class="kv saveqr-hint">${L('Paying on this phone? Save the QR, then open your banking app and pick it from your photos.', 'ชำระด้วยมือถือเครื่องนี้? บันทึก QR แล้วเลือกรูปจากแอปธนาคาร')}</p>`);
   } catch (e) { showErr(e.message); $('#qr').innerHTML = ''; return; }
   if (manual) {
     $('#claimBtn').onclick = async () => {

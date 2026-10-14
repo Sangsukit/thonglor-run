@@ -1,6 +1,8 @@
 // Shared helpers for every page: language, API calls, formatting.
 const TH = {
-  'nav.packs': 'แพ็กเกจ', 'nav.route': 'เส้นทาง', 'nav.register': 'สมัคร', 'nav.mine': 'การสมัครของฉัน',
+  'nav.packs': 'แพ็กเกจ', 'nav.route': 'เส้นทาง', 'nav.register': 'สมัคร', 'nav.mine': 'การสมัครของฉัน', 'nav.cause': 'เพื่อใคร',
+  'how.1': 'เลือก 5K, 10K หรือ VIP', 'how.2': 'กรอกข้อมูลนักวิ่ง', 'how.3': 'ชำระผ่านพร้อมเพย์ รับ e-ticket QR',
+  'packs.swipe': 'ปัดเพื่อดูแพ็กเกจอื่น', 'merch.title': 'เสื้อที่ระลึก', 'merch.lead': 'ทุกแพ็กเกจได้รับเสื้อที่ระลึก ระยะ 10K และ 5K มีสีแตกต่างกัน (ด้านหน้าและด้านหลัง)', 'merch.note': 'VIP ได้รับเสื้อตามระยะที่เลือก ภาพตัวอย่างดีไซน์ สินค้าจริงอาจแตกต่างเล็กน้อย', 'f.seeshirt': 'ดูดีไซน์เสื้อ', 'f.sizechart': 'ตารางไซซ์', 'mbar.submit': 'สมัครและชำระเงิน',
   'hero.eyebrow': 'วิ่งไปกับตำรวจ · สน.ทองหล่อ', 'hero.dow': 'วันอาทิตย์', 'hero.start': 'ปล่อยตัว', 'hero.where': 'จุดเริ่ม/เส้นชัย',
   'venue': 'อุทยานเบญจสิริ สุขุมวิท', 'hero.dist': 'ระยะทาง', 'hero.spots': 'ที่ว่างคงเหลือ', 'hero.cta': 'สมัครเลย',
   'hero.tag': 'ค่าสมัครทุกบาทสมทบกองทุนสวัสดิการข้าราชการตำรวจ สน.ทองหล่อ และครอบครัว',
@@ -75,5 +77,21 @@ window.STATUS = {
 };
 window.stChip = s => `<span class="chip st-${STATUS[s][2]}">${L(STATUS[s][0], STATUS[s][1])}</span>`;
 window.packColor = p => ({ '5K': '--k5', '10K': '--k10', 'VIP': '--vip' }[p]);
+
+// Phone menu
+document.addEventListener('click', e => {
+  const hdr = document.querySelector('header.top');
+  if (!hdr) return;
+  const btn = e.target.closest('.menu-btn');
+  if (btn) { const open = hdr.classList.toggle('open'); btn.setAttribute('aria-expanded', open); return; }
+  if (hdr.classList.contains('open') && (e.target.closest('nav.main a') || !e.target.closest('header.top'))) {
+    hdr.classList.remove('open'); hdr.querySelector('.menu-btn')?.setAttribute('aria-expanded', 'false');
+  }
+});
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  const hdr = document.querySelector('header.top.open');
+  if (hdr) { hdr.classList.remove('open'); const b = hdr.querySelector('.menu-btn'); b?.setAttribute('aria-expanded', 'false'); b?.focus(); }
+});
 
 document.addEventListener('DOMContentLoaded', () => window.applyI18n());

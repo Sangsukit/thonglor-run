@@ -34,21 +34,44 @@ function renderPacks() {
       </div>
     </button>`).join('');
   document.querySelectorAll('.pack').forEach(b => b.onclick = () => { selPack = b.dataset.pack; renderPacks(); renderChosen(); $('#register').scrollIntoView({ behavior: 'smooth' }); });
+  centerSelectedPack();
 }
 function renderChosen() {
   const p = PACKS[selPack];
-  $('#chosen').innerHTML = `<span class="chip ${selPack === '5K' ? 'k5' : selPack === '10K' ? 'k10' : 'vip'}">${selPack}</span>
-    <span><b class="num">${fmt(p.price)} THB</b> · ${p.incl.map(i => L(...INCL[i])).join(', ')}</span>`;
+  const dist = selPack === 'VIP' ? L('5 or 10 KM, your choice', 'เลือก 5 หรือ 10 กม.') : selPack.replace('K', ' KM');
+  $('#summary').style.setProperty('--pc', `var(${packColor(selPack)})`);
+  $('#summary').innerHTML = `<div class="sb"><span class="n">${selPack}</span><span class="p num">${fmt(p.price)} THB</span></div>
+    <div class="sbody"><div class="kv">${L('Distance', 'ระยะทาง')} <b>${dist}</b> · <b>15 Nov 2026, 06:00</b></div>
+      <ul>${p.incl.map(i => `<li>${ICONS[i]}<span>${L(...INCL[i])}</span></li>`).join('')}</ul>
+      <a class="change" href="#packs">${L('Change race pack', 'เปลี่ยนแพ็กเกจ')}</a>
+      <div class="next">${L('Next: pay by PromptPay QR. Your spot is held for 24 hours while you pay.', 'ขั้นต่อไป: ชำระผ่าน QR พร้อมเพย์ เราจองที่ให้ 24 ชั่วโมง')}</div></div>`;
   $('#vipDist').hidden = selPack !== 'VIP';
+  if (document.querySelector('#regForm legend')) numberLegends();
+  $('#mbarPack').textContent = selPack;
+  $('#mbarPack').className = `chip ${selPack === '5K' ? 'k5' : selPack === '10K' ? 'k10' : 'vip'}`;
+  $('#mbarPrice').textContent = `${fmt(p.price)} THB`;
+}
+function centerSelectedPack() {
+  const list = $('#packList'), el = list.querySelector(`[data-pack="${selPack}"]`);
+  if (el && list.scrollWidth > list.clientWidth) list.scrollLeft = el.offsetLeft - (list.clientWidth - el.offsetWidth) / 2;
+}
+function numberLegends() {
+  document.querySelectorAll('#regForm legend').forEach((lg, i, all) => {
+    if (lg.querySelector('.ln')) lg.querySelector('.ln').remove();
+    const vip = !$('#vipDist').hidden; const n = vip ? i + 1 : i; if (!vip && i === 0) return;
+    lg.insertAdjacentHTML('afterbegin', `<span class="ln">${n}</span>`);
+  });
 }
 function renderShirts() {
   const cur = (document.querySelector('input[name=shirt]:checked') || {}).value;
   $('#shirtSeg').innerHTML = SIZES.map(s => `<label><input type="radio" name="shirt" value="${s}" ${s === cur ? 'checked' : ''}> ${s}</label>`).join('');
 }
+let selRoute = '10K';
 function renderRoutes() {
   $('#routes').innerHTML = ['10K', '5K'].map(k => `
-    <div class="route" style="--rc:var(${packColor(k)})"><h3>${k === '10K' ? '10 KM' : '5 KM'}</h3>
+    <div class="route ${k === selRoute ? 'active' : ''}" role="tabpanel" style="--rc:var(${packColor(k)})"><h3>${k === '10K' ? '10 KM' : '5 KM'}</h3>
       <ol>${ROUTES[k].map((r, i) => `<li class="${r[2] ? 'sf' : ''}"><span class="dot">${r[2] ? (i === 0 ? 'S' : 'F') : i}</span><span>${L(r[1], r[0])}<small>${L(r[0], r[1])}</small></span></li>`).join('')}</ol></div>`).join('');
+  document.querySelectorAll('[data-rt]').forEach(b => { b.setAttribute('aria-selected', b.dataset.rt === selRoute); b.onclick = () => { selRoute = b.dataset.rt; renderRoutes(); }; });
 }
 function renderCause() {
   const items = LANG === 'th' ? [
@@ -76,6 +99,10 @@ function renderSponsors() {
     { n: 'Co-Sponsor', p: L('100,000 THB', '100,000 บาท'), b: [L('Logo on the back of the event shirt', 'โลโก้ด้านหลังเสื้อ'), L('Logo on every runner\'s bib', 'โลโก้บน BIB'), L('2 beach flags along the course', 'ธงริมเส้นทาง 2 ผืน'), L('10 complimentary entries', 'สิทธิ์สมัครฟรี 10 คน'), L('3×3 m booth at the event area', 'บูธขนาด 3×3 ม.')] }
   ];
   $('#sponList').innerHTML = tiers.map(t => `<div class="spon"><h3>${esc(t.n)}</h3><div class="price num">${esc(t.p)}</div><ul>${t.b.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>`).join('');
+}
+async function loadShirts() {
+  let d = 1; try { d = (await api('/api/config')).shirtDesign || 1; } catch {}
+  $('#shirt10').src = `/img/shirts/o${d}-10k.jpg`; $('#shirt5').src = `/img/shirts/o${d}-5k.jpg`;
 }
 async function loadStats() {
   try {
@@ -127,7 +154,7 @@ const SERVER_FIELD = { firstName: 'first', lastName: 'last', dateOfBirth: 'dob',
 async function submit(e) {
   e.preventDefault();
   $('#formError').hidden = true;
-  if (!validate()) { document.querySelector('.invalid, .err:not(:empty)')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+  if (!validate()) { const bad = document.querySelector('.invalid, .err:not(:empty)'); bad?.scrollIntoView({ behavior: 'smooth', block: 'center' }); (bad?.matches('input,select,textarea') ? bad : bad?.closest('.field,.formsec')?.querySelector('input'))?.focus({ preventScroll: true }); return; }
   const v = id => document.getElementById(id).value.trim();
   const body = {
     pack: selPack, distance: selPack === 'VIP' ? document.querySelector('input[name=vipDistance]:checked').value : undefined,
@@ -154,10 +181,24 @@ async function submit(e) {
   }
 }
 
-function renderAll() { renderPacks(); renderChosen(); renderShirts(); renderRoutes(); renderCause(); renderSponsors(); }
+function renderAll() { renderPacks(); renderChosen(); renderShirts(); renderRoutes(); renderCause(); renderSponsors(); numberLegends(); }
+
+// Phone action bar: "Register" while browsing, "Register & pay" inside the form, hidden when the form's own button is on screen.
+function setupMbar() {
+  const bar = $('#mbar'); if (!bar || !('IntersectionObserver' in window)) return;
+  document.body.classList.add('has-mbar');
+  const seen = { hero: true, form: false, actions: false };
+  const update = () => {
+    bar.hidden = seen.hero || seen.actions;
+    $('#mbarGo').hidden = seen.form; $('#mbarSubmit').hidden = !seen.form;
+  };
+  const io = new IntersectionObserver(es => { es.forEach(e => { seen[e.target.dataset.io] = e.isIntersecting; }); update(); }, { threshold: 0 });
+  const tag = (el, k) => { if (el) { el.dataset.io = k; io.observe(el); } };
+  tag(document.querySelector('.hero .facts .btn'), 'hero'); tag($('#regPanel'), 'form'); tag($('#formActions'), 'actions');
+}
 window.onLangChange = () => { renderAll(); updateIdLabel(); };
 document.addEventListener('DOMContentLoaded', () => {
-  renderAll(); loadStats();
+  renderAll(); loadStats(); loadShirts(); setupMbar(); requestAnimationFrame(centerSelectedPack);
   $('#nationality').onchange = updateIdLabel;
   $('#dob').onchange = () => { const v = $('#dob').value; $('#ageHint').textContent = v ? L('Age on race day: ', 'อายุ ณ วันแข่ง: ') + ageOnRaceDay(v) : ''; };
   $('#regForm').addEventListener('submit', submit);

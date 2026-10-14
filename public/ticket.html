@@ -13,16 +13,21 @@
 <script src="/js/ticket.js" defer></script>
 </head>
 <body>
-<header class="top">
+<header class="top" id="top-header">
   <div class="wrap">
     <a class="brand" href="/">THONGLOR <b>RUN</b></a>
-    <nav class="main" aria-label="Main">
+    <nav class="main" id="mainNav" aria-label="Main">
       <a href="/#packs" data-i18n="nav.packs">Race packs</a>
       <a href="/#route" data-i18n="nav.route">Route</a>
-      <a href="/#register" data-i18n="nav.register">Register</a>
+      <a href="/#cause" data-i18n="nav.cause">The cause</a>
       <a href="/my" data-i18n="nav.mine">My entries</a>
-      <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="en" aria-pressed="true">EN</button><button type="button" data-lang="th" aria-pressed="false">ไทย</button></div>
+      <a href="/#register" class="nav-reg" data-i18n="nav.register">Register</a>
     </nav>
+    <div class="hdr-actions">
+      <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="en" aria-pressed="true">EN</button><button type="button" data-lang="th" aria-pressed="false">ไทย</button></div>
+      <a class="btn small hdr-cta" href="/#register" data-i18n="nav.register">Register</a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mainNav" aria-label="Menu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
   </div>
 </header>
 <main>

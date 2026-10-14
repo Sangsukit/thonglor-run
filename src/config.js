@@ -25,6 +25,8 @@ export const config = {
     'VIP': { price: 1200, distances: ['5K', '10K'], bibStart: 1,     bibPrefix: 'V', bibPad: 3 }
   },
   shirtSizes: ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'],
+  // Which shirt design from the deck to show runners: 1 = maroon/white, 2 = orange/white
+  shirtDesign: env.SHIRT_DESIGN === '2' ? 2 : 1,
 
   // Unpaid entries hold a spot for this many hours, then expire.
   holdHours: int(env.HOLD_HOURS, 24),

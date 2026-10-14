@@ -15,16 +15,21 @@
 <script src="/js/site.js" defer></script>
 </head>
 <body>
-<header class="top">
+<header class="top" id="top-header">
   <div class="wrap">
     <a class="brand" href="/">THONGLOR <b>RUN</b></a>
-    <nav class="main" aria-label="Main">
+    <nav class="main" id="mainNav" aria-label="Main">
       <a href="/#packs" data-i18n="nav.packs">Race packs</a>
       <a href="/#route" data-i18n="nav.route">Route</a>
-      <a href="/#register" data-i18n="nav.register">Register</a>
+      <a href="/#cause" data-i18n="nav.cause">The cause</a>
       <a href="/my" data-i18n="nav.mine">My entries</a>
-      <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="en" aria-pressed="true">EN</button><button type="button" data-lang="th" aria-pressed="false">ไทย</button></div>
+      <a href="/#register" class="nav-reg" data-i18n="nav.register">Register</a>
     </nav>
+    <div class="hdr-actions">
+      <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="en" aria-pressed="true">EN</button><button type="button" data-lang="th" aria-pressed="false">ไทย</button></div>
+      <a class="btn small hdr-cta" href="/#register" data-i18n="nav.register">Register</a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mainNav" aria-label="Menu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
   </div>
 </header>
 <main id="main">
@@ -56,10 +61,27 @@
 
   <div class="ribbon"><div class="wrap"><span class="script">Run together · Trust together</span><span class="th">ทุกก้าว เคียงข้างประชาชน</span></div></div>
 
+  <section class="how" aria-label="How it works">
+    <div class="wrap"><ol class="how3">
+      <li><b>1</b><span data-i18n="how.1">Choose 5K, 10K or VIP</span></li>
+      <li><b>2</b><span data-i18n="how.2">Fill in the runner's details</span></li>
+      <li><b>3</b><span data-i18n="how.3">Pay by PromptPay and get your e-ticket QR</span></li>
+    </ol></div>
+  </section>
+
   <section class="block" id="packs">
     <div class="wrap">
       <div class="head"><div><div class="eyebrow" data-i18n="packs.eyebrow">Step 1</div><h2 data-i18n="packs.title">Choose your race pack</h2></div></div>
       <div class="packs" id="packList"></div>
+      <p class="swipe-hint" data-i18n="packs.swipe">Swipe to compare packs</p>
+      <div class="merch" id="merch">
+        <div class="merch-head"><h3 data-i18n="merch.title">Event shirt</h3><p class="lede" data-i18n="merch.lead">Every race pack comes with the official shirt. 10K and 5K runners get their own colourway, front and back shown.</p></div>
+        <div class="merch-grid">
+          <figure class="shirt"><img id="shirt10" alt="10K event shirt, front and back" width="1286" height="932" loading="lazy"><figcaption><span class="chip k10">10 KM</span></figcaption></figure>
+          <figure class="shirt"><img id="shirt5" alt="5K event shirt, front and back" width="1304" height="932" loading="lazy"><figcaption><span class="chip k5">5 KM</span></figcaption></figure>
+        </div>
+        <p class="kv" data-i18n="merch.note">VIP runners get the shirt for the distance they choose. Design preview; final print may differ slightly.</p>
+      </div>
     </div>
   </section>
 
@@ -68,38 +90,40 @@
       <div class="head"><div><div class="eyebrow" data-i18n="reg.eyebrow">Entry form</div><h2 data-i18n="reg.title">Register</h2>
         <p data-i18n="reg.lead">Fill in details exactly as they appear on your ID card or passport. Your bib number is issued as soon as your payment goes through.</p></div></div>
       
+      <div class="regwrap">
+      <aside class="summary" id="summary" aria-label="Your entry"></aside>
       <div class="panel" id="regPanel">
-        <div class="chosen" id="chosen"></div>
         <form id="regForm" novalidate>
           <div class="formsec" id="vipDist" hidden>
             <fieldset><legend data-i18n="f.vipdist">VIP distance</legend>
-              <div class="seg"><label><input type="radio" name="vipDistance" value="10K" checked> 10 KM</label><label><input type="radio" name="vipDistance" value="5K"> 5 KM</label></div>
+              <div class="seg seg2"><label><input type="radio" name="vipDistance" value="10K" checked> 10 KM</label><label><input type="radio" name="vipDistance" value="5K"> 5 KM</label></div>
             </fieldset>
           </div>
           <div class="formsec"><fieldset><legend data-i18n="f.runner">Runner</legend>
             <div class="grid2">
-              <div class="field"><label for="first" data-i18n="f.first">First name</label><input type="text" id="first" autocomplete="given-name" required><div class="err"></div></div>
-              <div class="field"><label for="last" data-i18n="f.last">Last name</label><input type="text" id="last" autocomplete="family-name" required><div class="err"></div></div>
-              <div class="field"><label for="bibName" data-i18n="f.bibname">Name on bib</label><input type="text" id="bibName" maxlength="12"><div class="hint" data-i18n="f.bibhint">Up to 12 characters. Leave blank to use your first name.</div></div>
+              <div class="field"><label for="first" data-i18n="f.first">First name</label><input type="text" id="first" autocomplete="given-name" autocapitalize="words" required><div class="err"></div></div>
+              <div class="field"><label for="last" data-i18n="f.last">Last name</label><input type="text" id="last" autocomplete="family-name" autocapitalize="words" required><div class="err"></div></div>
+              <div class="field"><label for="bibName" data-i18n="f.bibname">Name on bib</label><input type="text" id="bibName" maxlength="12" autocapitalize="characters"><div class="hint" data-i18n="f.bibhint">Up to 12 characters. Leave blank to use your first name.</div></div>
               <div class="field"><span class="lab" data-i18n="f.gender">Gender</span>
-                <div class="seg" id="gender"><label><input type="radio" name="gender" value="M"> <span data-i18n="g.m">Male</span></label><label><input type="radio" name="gender" value="F"> <span data-i18n="g.f">Female</span></label><label><input type="radio" name="gender" value="X"> <span data-i18n="g.x">Not specified</span></label></div><div class="err"></div></div>
+                <div class="seg seg3" id="gender"><label><input type="radio" name="gender" value="M"> <span data-i18n="g.m">Male</span></label><label><input type="radio" name="gender" value="F"> <span data-i18n="g.f">Female</span></label><label><input type="radio" name="gender" value="X"> <span data-i18n="g.x">Not specified</span></label></div><div class="err"></div></div>
               <div class="field"><label for="dob" data-i18n="f.dob">Date of birth</label><input type="date" id="dob" required max="2016-11-15"><div class="hint" id="ageHint"></div><div class="err"></div></div>
               <div class="field"><label for="nationality" data-i18n="f.nat">Nationality</label><select id="nationality"><option value="TH" data-i18n="n.th">Thai</option><option value="OTHER" data-i18n="n.other">Other</option></select></div>
               <div class="field full"><label for="idNo" id="idLabel" data-i18n="f.idth">Thai ID card number (13 digits)</label><input type="text" id="idNo" inputmode="numeric" autocomplete="off" required><div class="err"></div></div>
             </div></fieldset></div>
           <div class="formsec"><fieldset><legend data-i18n="f.contact">Contact</legend>
             <div class="grid2">
-              <div class="field"><label for="phone" data-i18n="f.phone">Mobile number</label><input type="tel" id="phone" autocomplete="tel" placeholder="08x xxx xxxx" required><div class="err"></div></div>
-              <div class="field"><label for="email" data-i18n="f.email">Email</label><input type="email" id="email" autocomplete="email" required><div class="hint" data-i18n="f.emailhint">Your confirmation and e-ticket are sent here.</div><div class="err"></div></div>
-              <div class="field"><label for="emName" data-i18n="f.emname">Emergency contact name</label><input type="text" id="emName" required><div class="err"></div></div>
-              <div class="field"><label for="emPhone" data-i18n="f.emphone">Emergency contact phone</label><input type="tel" id="emPhone" required><div class="err"></div></div>
+              <div class="field"><label for="phone" data-i18n="f.phone">Mobile number</label><input type="tel" id="phone" inputmode="tel" autocomplete="tel" placeholder="08x xxx xxxx" required><div class="err"></div></div>
+              <div class="field"><label for="email" data-i18n="f.email">Email</label><input type="email" id="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" required><div class="hint" data-i18n="f.emailhint">Your confirmation and e-ticket are sent here.</div><div class="err"></div></div>
+              <div class="field"><label for="emName" data-i18n="f.emname">Emergency contact name</label><input type="text" id="emName" autocapitalize="words" required><div class="err"></div></div>
+              <div class="field"><label for="emPhone" data-i18n="f.emphone">Emergency contact phone</label><input type="tel" id="emPhone" inputmode="tel" required><div class="err"></div></div>
               <div class="field full"><label for="medical" data-i18n="f.medical">Medical conditions, allergies or medication (optional)</label><textarea id="medical"></textarea></div>
             </div></fieldset></div>
           <div class="formsec"><fieldset><legend data-i18n="f.shirt">Event shirt size</legend>
-            <div class="seg" id="shirtSeg"></div><div class="err" id="shirtErr"></div>
-            <div class="sizes"><table aria-label="Shirt size chart"><thead><tr><th data-i18n="f.size">Size</th><th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>2XL</th><th>3XL</th></tr></thead>
+            <div class="seg sizes-seg" id="shirtSeg"></div><div class="err" id="shirtErr"></div>
+            <a class="kv seeshirt" href="#merch" data-i18n="f.seeshirt">See the shirt design</a>
+            <details class="sizechart"><summary data-i18n="f.sizechart">Size chart</summary><div class="sizes"><table aria-label="Shirt size chart"><thead><tr><th data-i18n="f.size">Size</th><th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>2XL</th><th>3XL</th></tr></thead>
               <tbody><tr><td data-i18n="f.chest">Chest (in)</td><td>34</td><td>36</td><td>38</td><td>40</td><td>42</td><td>44</td><td>46</td></tr>
-              <tr><td data-i18n="f.length">Length (in)</td><td>25</td><td>26</td><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td></tr></tbody></table></div>
+              <tr><td data-i18n="f.length">Length (in)</td><td>25</td><td>26</td><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td></tr></tbody></table></div></details>
           </fieldset></div>
           <div class="formsec">
             <label class="check"><input type="checkbox" id="waiver"><span data-i18n="f.waiver">I am in good health to take part and accept that I run at my own risk. I will follow the instructions of race officials and police on the course.</span></label>
@@ -107,9 +131,9 @@
             <div class="err" id="consentErr"></div>
           </div>
           <div class="notice bad" id="formError" hidden></div>
-          <div class="actions"><a class="btn ghost" href="#packs" data-i18n="f.back">Change race pack</a><button class="btn" type="submit" id="submitBtn" data-i18n="f.submit">Register and continue to payment</button></div>
+          <div class="actions" id="formActions"><button class="btn" type="submit" id="submitBtn" data-i18n="f.submit">Register and continue to payment</button><a class="btn ghost" href="#packs" data-i18n="f.back">Change race pack</a></div>
         </form>
-        
+      </div>
       </div>
     </div>
   </section>
@@ -118,6 +142,7 @@
     <div class="wrap">
       <div class="head"><div><div class="eyebrow" data-i18n="route.eyebrow">Course</div><h2 data-i18n="route.title">The route</h2>
         <p data-i18n="route.lead">Both courses start and finish at the same park and run past Thonglor Police Station's neighbourhood. Roads are closed and marshalled by police officers.</p></div></div>
+      <div class="rtabs" role="tablist" aria-label="Distance"><button type="button" role="tab" data-rt="10K" aria-selected="true">10 KM</button><button type="button" role="tab" data-rt="5K" aria-selected="false">5 KM</button></div>
       <div class="routes" id="routes"></div>
     </div>
   </section>
@@ -139,6 +164,11 @@
   </section>
   <footer><div class="wrap"><span data-i18n="footer">Thonglor Charity Run 2026 · Organised with Thonglor Metropolitan Police Station · Produced by MI6 Bangkok</span><img src="/img/mi6-bangkok.png" alt="MI6 Bangkok" width="60" height="38"></div></footer>
 </main>
+<div class="mbar" id="mbar" hidden>
+  <div class="mbar-info"><span class="chip" id="mbarPack">10K</span><b class="num" id="mbarPrice">800 THB</b></div>
+  <a class="btn" id="mbarGo" href="#register" data-i18n="hero.cta">Register now</a>
+  <button class="btn" id="mbarSubmit" type="submit" form="regForm" hidden data-i18n="mbar.submit">Register &amp; pay</button>
+</div>
 
 </body>
 </html>
