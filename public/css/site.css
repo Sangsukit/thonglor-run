@@ -520,3 +520,51 @@ footer a{color:inherit}
 .route.r10K{--rc:#2F7BE0}
 .route.r5K{--rc:#F5C518}
 .route.r5K li.sf .dot{color:#111}
+
+/* Interactive course map (Leaflet over the organizer's map image) */
+.cmapwrap{min-width:0}
+.cmap{position:relative;height:clamp(340px,62vh,560px);border-radius:var(--r);overflow:hidden;border:1px solid var(--line);background:#E9ECEF}
+.cmap>a img{display:block;width:100%;height:100%;object-fit:cover}
+.cmap.live{background:#E9ECEF}
+.cmap .cmap-img{filter:saturate(.55) brightness(1.04)}
+.cmap .leaflet-control-attribution{font-size:10px;background:rgba(255,255,255,.75);color:#333}
+.cmap .leaflet-control-attribution a{color:#333}
+.cmap .leaflet-bar a{background:#15171B;color:#fff;border-color:#2B2F37;width:36px;height:36px;line-height:36px;font-size:20px}
+.cmap .leaflet-bar a:hover{background:#1E2127}
+.cmap-flow{animation:cflow 1.6s linear infinite}
+@keyframes cflow{to{stroke-dashoffset:-32}}
+@media (prefers-reduced-motion:reduce){.cmap-flow{animation:none}}
+.cp{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;font:800 italic 13px/1 var(--display);color:#fff;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35);cursor:pointer}
+.cp10K{background:#1E6FE0} .cp5K{background:#F5B800;color:#111}
+.cp-sf{display:inline-block;white-space:nowrap;background:var(--red);color:#fff;font:800 italic 11px/1 var(--display);letter-spacing:.04em;padding:7px 10px;border-radius:6px;border:2px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.35)}
+.cpsfw{text-align:center}
+.me-dot{display:block;width:18px;height:18px;border-radius:50%;background:#2F7BE0;border:3px solid #fff;box-shadow:0 0 0 0 rgba(47,123,224,.6);animation:mepulse 1.8s infinite}
+@keyframes mepulse{70%{box-shadow:0 0 0 16px rgba(47,123,224,0)}100%{box-shadow:0 0 0 0 rgba(47,123,224,0)}}
+.cmap .leaflet-popup-content-wrapper{background:#15171B;color:var(--ink);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.cmap .leaflet-popup-tip{background:#15171B}
+.cmap .leaflet-popup-content{margin:12px 14px;font-family:var(--body);font-size:14px;line-height:1.4}
+.cpop{display:flex;flex-direction:column;gap:6px;min-width:170px}
+.cpop b{font-weight:600}
+.cpop small{display:block;color:var(--muted);font-weight:400;font-size:12px}
+.cpop a{color:var(--yellow);font-weight:600}
+.cpop .chip{align-self:flex-start;font-size:11px}
+.cmap-unlock{position:absolute;z-index:500;left:50%;bottom:14px;transform:translateX(-50%);background:rgba(11,12,14,.85);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:9px 16px;font:600 13px var(--body);cursor:pointer}
+.cmap-tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.cmap-tools .btn{min-height:44px}
+.cmap-tools #cmapNav{flex:1 1 220px}
+.cmap-note{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin:10px 0 0;color:var(--muted);font-size:13px}
+.cmap-note .lg{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--ink)}
+.cmap-note .lg i{width:18px;height:5px;border-radius:3px;display:inline-block}
+.cmap-note .l10 i{background:#1E6FE0} .cmap-note .l5 i{background:#F5B800}
+/* route lists become checkpoint buttons; one distance at a time on every screen */
+.rtabs{display:grid!important;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:4px}
+.rtabs button{border:0;background:transparent;border-radius:7px;min-height:42px;font-family:var(--display);font-style:italic;font-weight:800;cursor:pointer;color:var(--muted)}
+.rtabs button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+.route:not(.active){display:none}
+.route li{padding:0}
+.route .cpbtn{all:unset;box-sizing:border-box;display:flex;gap:12px;align-items:center;width:100%;padding:5px 6px;margin-left:-6px;border-radius:8px;cursor:pointer}
+.route .cpbtn:hover,.route li.on .cpbtn{background:var(--sunk)}
+.route .cpbtn:focus-visible{outline:2px solid var(--yellow)}
+.route li.on .dot{background:var(--rc);color:#fff}
+.route.r5K li.on .dot{color:#111}
+@media (max-width:860px){.cmap{height:auto;aspect-ratio:1146/950;min-height:300px}}

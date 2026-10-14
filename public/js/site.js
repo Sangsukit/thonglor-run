@@ -76,9 +76,11 @@ function renderShirts() {
 let selRoute = '10K';
 function renderRoutes() {
   $('#routes').innerHTML = ['10K', '5K'].map(k => `
-    <div class="route r${k} ${k === selRoute ? 'active' : ''}" role="tabpanel"><h3>${k === '10K' ? '10 KM' : '5 KM'}</h3>
-      <ol>${ROUTES[k].map((r, i) => `<li class="${typeof r[2] === 'string' ? 'sf' : ''}"><span class="dot">${r[2]}</span><span>${L(r[1], r[0])}<small>${L(r[0], r[1])}</small></span></li>`).join('')}</ol></div>`).join('');
-  document.querySelectorAll('[data-rt]').forEach(b => { b.setAttribute('aria-selected', b.dataset.rt === selRoute); b.onclick = () => { selRoute = b.dataset.rt; renderRoutes(); }; });
+    <div class="route r${k} ${k === selRoute ? 'active' : ''}" role="tabpanel" data-k="${k}"><h3>${k === '10K' ? '10 KM' : '5 KM'}</h3>
+      <ol>${ROUTES[k].map((r, i) => `<li class="${typeof r[2] === 'string' ? 'sf' : ''}" data-cp="${r[2]}"><button type="button" class="cpbtn"><span class="dot">${r[2]}</span><span>${L(r[1], r[0])}<small>${L(r[0], r[1])}</small></span></button></li>`).join('')}</ol></div>`).join('');
+  document.querySelectorAll('[data-rt]').forEach(b => { b.setAttribute('aria-selected', b.dataset.rt === selRoute); b.onclick = () => { selRoute = b.dataset.rt; renderRoutes(); window.CourseMap?.setActive(selRoute); }; });
+  document.querySelectorAll('.route li[data-cp]').forEach(li => { li.querySelector('button').onclick = () => window.CourseMap?.focus(li.closest('.route').dataset.k, /^\d+$/.test(li.dataset.cp) ? +li.dataset.cp : li.dataset.cp); });
+  window.CourseMap?.refresh();
 }
 function renderCause() {
   const items = LANG === 'th' ? [
@@ -207,6 +209,8 @@ function setupMbar() {
   tag(document.querySelector('.hero .facts .btn'), 'hero'); tag($('#regPanel'), 'form'); tag($('#formActions'), 'actions');
 }
 window.onLangChange = () => { renderAll(); updateIdLabel(); };
+// Tapping a route line or checkpoint on the map switches the list below it.
+window.onCourseRoute = k => { if (k !== selRoute) { selRoute = k; renderRoutes(); } };
 document.addEventListener('DOMContentLoaded', () => {
   renderAll(); loadStats(); loadShirts(); setupMbar(); requestAnimationFrame(centerSelectedPack);
   $('#nationality').onchange = updateIdLabel;
