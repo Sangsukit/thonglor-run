@@ -39,7 +39,8 @@ const baseSchema = z.object({
   medical: z.string().trim().max(500).optional().default(''),
   shirtSize: z.enum(config.shirtSizes),
   acceptWaiver: z.literal(true, { message: 'must accept the waiver' }),
-  acceptPdpa: z.literal(true, { message: 'must accept the PDPA consent' })
+  acceptPdpa: z.literal(true, { message: 'must accept the PDPA consent' }),
+  acceptGuardian: z.boolean().optional().default(false)
 });
 
 // Cross-field checks run on the raw input too, so a runner sees every problem at once.
@@ -54,6 +55,7 @@ function extraChecks(v, add) {
       const age = ageOn(v.dateOfBirth);
       if (age < config.event.minAge) add('dateOfBirth', `must be at least ${config.event.minAge} on race day`);
       if (age > 100) add('dateOfBirth', 'check the date of birth');
+      if (age < 18 && v.acceptGuardian !== true) add('acceptGuardian', 'a parent or guardian must accept the terms for runners under 18');
     }
   }
   const pack = config.packs[v.pack];

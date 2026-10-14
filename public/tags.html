@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Runner tags · Thonglor Charity Run</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700;1,800&family=Noto+Sans+Thai:wght@400;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="/css/site.css">
+<link rel="stylesheet" href="/css/tags.css">
+<script src="/js/common.js" defer></script>
+<script src="/js/tags.js" defer></script>
+</head>
+<body class="tags-page">
+<header class="top noprint">
+  <div class="wrap">
+    <a class="brand" href="/admin">THONGLOR <b>RUN</b></a>
+    <nav class="main" aria-label="Organizer"><a href="/admin" data-en="← Back to desk" data-th="← กลับไปหน้าโต๊ะลงทะเบียน">← Back to desk</a>
+      <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="en" aria-pressed="true">EN</button><button type="button" data-lang="th" aria-pressed="false">ไทย</button></div>
+    </nav>
+  </div>
+</header>
+<main>
+  <section class="noprint tagbar">
+    <div class="wrap">
+      <div class="eyebrow" data-en="Organizer desk" data-th="โต๊ะผู้จัด">Organizer desk</div>
+      <h2 data-en="Runner tags for the gate" data-th="ป้ายนักวิ่งสำหรับจุดตรวจ">Runner tags for the gate</h2>
+      <p class="muted" data-en="Confirmed entries only. A4 paper, 8 tags per sheet, cut along the dashed lines. In the print dialog choose 100% scale and turn on background graphics." data-th="เฉพาะผู้สมัครที่ชำระเงินแล้ว กระดาษ A4 แผ่นละ 8 ป้าย ตัดตามเส้นประ ตอนสั่งพิมพ์ให้เลือกขนาด 100% และเปิด background graphics">Confirmed entries only. A4 paper, 8 tags per sheet, cut along the dashed lines. In the print dialog choose 100% scale and turn on background graphics.</p>
+      <div class="notice bad" id="authErr" hidden><span data-en="Sign in at the organizer desk first." data-th="กรุณาเข้าสู่ระบบที่หน้าโต๊ะผู้จัดก่อน">Sign in at the organizer desk first.</span> <a class="btn small" href="/admin" data-en="Sign in" data-th="เข้าสู่ระบบ">Sign in</a></div>
+      <form class="toolbar" id="tagFilter" novalidate>
+        <select id="tPack" aria-label="Pack"><option value="" data-en="All packs" data-th="ทุกแพ็กเกจ">All packs</option><option>5K</option><option>10K</option><option>VIP</option></select>
+        <select id="tWhich" aria-label="Which tags"><option value="1" data-en="Not printed yet" data-th="ยังไม่ได้พิมพ์">Not printed yet</option><option value="" data-en="All confirmed" data-th="ทั้งหมดที่ชำระแล้ว">All confirmed</option></select>
+        <input type="text" id="tFrom" inputmode="numeric" placeholder="Bib from" aria-label="Bib from" data-ph-th="BIB ตั้งแต่">
+        <input type="text" id="tTo" inputmode="numeric" placeholder="Bib to" aria-label="Bib to" data-ph-th="BIB ถึง">
+        <input type="text" id="tRefs" placeholder="Refs, comma separated (optional)" aria-label="Refs" data-ph-th="เลขอ้างอิง คั่นด้วยจุลภาค (ไม่บังคับ)">
+        <button class="btn small ghost" type="submit" data-en="Show" data-th="แสดง">Show</button>
+      </form>
+      <div class="tagactions">
+        <span id="tCount" class="kv"></span>
+        <button class="btn" type="button" id="tPrint" disabled data-en="Print tags" data-th="พิมพ์ป้าย">Print tags</button>
+        <button class="btn ghost" type="button" id="tMark" disabled></button>
+      </div>
+    </div>
+  </section>
+  <div id="sheets" class="sheets"></div>
+</main>
+</body>
+</html>

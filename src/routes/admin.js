@@ -1,4 +1,5 @@
 import express from 'express';
+import QRCode from 'qrcode';
 import rateLimit from 'express-rate-limit';
 import { config } from '../config.js';
 import { query } from '../db.js';
@@ -26,7 +27,8 @@ const row = r => ({
   firstName: r.first_name, lastName: r.last_name, bibName: r.bib_name, gender: r.gender, dateOfBirth: r.date_of_birth,
   nationality: r.nationality, idNumber: r.id_number, phone: r.phone, email: r.email,
   emergencyName: r.emergency_name, emergencyPhone: r.emergency_phone, medical: r.medical, shirtSize: r.shirt_size,
-  paymentMethod: r.payment_method, paymentNote: r.payment_note, paidAt: r.paid_at, pickedUpAt: r.picked_up_at,
+  paymentMethod: r.payment_method, paymentNote: r.payment_note, paidAt: r.paid_at, pickedUpAt: r.picked_up_at, tagPrintedAt: r.tag_printed_at,
+  consentAt: r.consent_at, termsVersion: r.terms_version, guardianConsent: r.guardian_consent,
   expiresAt: r.expires_at, createdAt: r.created_at
 });
 
@@ -88,6 +90,30 @@ router.post('/registrations/:ref/resend', wrap(async (req, res) => {
   if (!reg) throw new AppError(404, 'not_found', 'Entry not found.');
   await (reg.status === 'paid' ? sendPaidEmail(reg) : sendTicketLinkEmail(reg));
   res.json({ ok: true });
+}));
+
+// Printable gate tags: confirmed entries only, in bib order.
+router.get('/tags', wrap(async (req, res) => {
+  const where = ["status = 'paid'"], params = [];
+  const add = (sql, v) => { params.push(v); where.push(sql.replaceAll('?', '$' + params.length)); };
+  if (req.query.refs) add('ref = ANY(?)', String(req.query.refs).toUpperCase().split(',').map(x => x.trim()).filter(Boolean).slice(0, 500));
+  if (req.query.pack) add('pack = ?', String(req.query.pack));
+  if (req.query.unprinted === '1') where.push('tag_printed_at IS NULL');
+  if (req.query.from) add('bib_no >= ?', parseInt(req.query.from, 10) || 0);
+  if (req.query.to) add('bib_no <= ?', parseInt(req.query.to, 10) || 0);
+  const { rows } = await query(`SELECT * FROM registrations WHERE ${where.join(' AND ')} ORDER BY pack, bib_no LIMIT 500`, params);
+  const items = await Promise.all(rows.map(async r => ({
+    ...row(r), tagPrintedAt: r.tag_printed_at,
+  consentAt: r.consent_at, termsVersion: r.terms_version, guardianConsent: r.guardian_consent,
+    qr: await QRCode.toString(`TGR26:${r.ref}`, { type: 'svg', margin: 0, errorCorrectionLevel: 'M' })
+  })));
+  res.json({ items, capped: rows.length === 500 });
+}));
+router.post('/tags/printed', wrap(async (req, res) => {
+  const refs = (Array.isArray(req.body?.refs) ? req.body.refs : []).map(x => String(x).toUpperCase()).slice(0, 500);
+  const { rows } = await query(`UPDATE registrations SET tag_printed_at=now(), updated_at=now() WHERE ref = ANY($1) AND status='paid' RETURNING id`, [refs]);
+  for (const r of rows) await query('INSERT INTO audit_log (registration_id, action, actor) VALUES ($1,$2,$3)', [r.id, 'tag_printed', actor(req)]);
+  res.json({ marked: rows.length });
 }));
 
 router.get('/export.csv', wrap(async (req, res) => {

@@ -126,8 +126,9 @@
               <tr><td data-i18n="f.length">Length (in)</td><td>25</td><td>26</td><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td></tr></tbody></table></div></details>
           </fieldset></div>
           <div class="formsec">
-            <label class="check"><input type="checkbox" id="waiver"><span data-i18n="f.waiver">I am in good health to take part and accept that I run at my own risk. I will follow the instructions of race officials and police on the course.</span></label>
-            <label class="check"><input type="checkbox" id="pdpa"><span data-i18n="f.pdpa">I consent to the organizer storing my personal data for this event only, in line with the Personal Data Protection Act (PDPA).</span></label>
+            <label class="check"><input type="checkbox" id="waiver"><span data-i18n="f.waiver">I have read and accept the <a href="/terms" target="_blank" rel="noopener">participant terms and waiver</a>. I am fit to take part, I understand the risks of running on public roads, and I will follow race officials and police on the course.</span></label>
+            <label class="check"><input type="checkbox" id="pdpa"><span data-i18n="f.pdpa">I consent to the organizer using my personal data, including health and emergency contact details, for this event as described in the <a href="/terms#privacy" target="_blank" rel="noopener">privacy notice</a> (PDPA).</span></label>
+            <label class="check" id="guardianRow" hidden><input type="checkbox" id="guardian"><span data-i18n="f.guardian">This runner is under 18. I am their parent or legal guardian, I consent to them taking part, and I accept the terms on their behalf.</span></label>
             <div class="err" id="consentErr"></div>
           </div>
           <div class="notice bad" id="formError" hidden></div>
@@ -162,7 +163,7 @@
       <div class="spons" id="sponList"></div>
     </div>
   </section>
-  <footer><div class="wrap"><span data-i18n="footer">Thonglor Charity Run 2026 · Organised with Thonglor Metropolitan Police Station · Produced by MI6 Bangkok</span><img src="/img/mi6-bangkok.png" alt="MI6 Bangkok" width="60" height="38"></div></footer>
+  <footer><div class="wrap"><span data-i18n="footer">Thonglor Charity Run 2026 · Organised with Thonglor Metropolitan Police Station · Produced by MI6 Bangkok</span> · <a href="/terms" data-i18n="nav.terms">Terms &amp; privacy</a><img src="/img/mi6-bangkok.png" alt="MI6 Bangkok" width="60" height="38"></div></footer>
 </main>
 <div class="mbar" id="mbar" hidden>
   <div class="mbar-info"><span class="chip" id="mbarPack">10K</span><b class="num" id="mbarPrice">800 THB</b></div>

@@ -470,3 +470,17 @@ textarea{min-height:84px}
 .shirt .chip{background:#fff;font-size:13px;padding:4px 12px}
 .seeshirt{font-weight:600;color:#7FA8FF!important;width:max-content}
 @media (max-width:760px){.merch-grid{grid-template-columns:minmax(0,1fr);gap:12px}}
+.headbtns{display:flex;gap:8px;flex-wrap:wrap}
+
+/* Terms page: one article per language, switched by the html lang the toggle sets. */
+html[lang=th] .terms .t-en, html:not([lang=th]) .terms .t-th{display:none}
+.terms article{max-width:760px}
+.terms h1{font:italic 800 clamp(28px,5vw,44px)/1.08 var(--display);text-transform:uppercase;margin:6px 0 16px}
+.terms h2{font-size:20px;margin:30px 0 8px}
+.terms p,.terms li{color:#D6DAE1;line-height:1.7}
+.terms .lead{font-size:17px;color:var(--ink)}
+.terms ul{padding-left:20px;margin:0}
+.terms li+li{margin-top:8px}
+.terms a{color:var(--yellow)}
+.check a{color:var(--yellow)}
+footer a{color:inherit}

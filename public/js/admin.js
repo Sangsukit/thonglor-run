@@ -85,13 +85,16 @@ async function openDetail(ref) {
     [L('Mobile', 'มือถือ'), r.phone], [L('Email', 'อีเมล'), r.email], [L('Emergency contact', 'ผู้ติดต่อฉุกเฉิน'), `${r.emergencyName} · ${r.emergencyPhone}`],
     [L('Medical', 'ข้อมูลสุขภาพ'), r.medical || '—'], [L('Shirt', 'เสื้อ'), r.shirtSize],
     [L('Payment', 'การชำระ'), [r.paymentMethod, r.paymentNote].filter(Boolean).join(' · ') || '—'],
-    [L('Race pack', 'Race pack'), r.pickedUpAt ? L('Collected ', 'รับแล้ว ') + new Date(r.pickedUpAt).toLocaleString('en-GB') : L('Not collected', 'ยังไม่รับ')]
+    [L('Race pack', 'Race pack'), r.pickedUpAt ? L('Collected ', 'รับแล้ว ') + new Date(r.pickedUpAt).toLocaleString('en-GB') : L('Not collected', 'ยังไม่รับ')],
+    [L('Terms accepted', 'ยอมรับข้อกำหนด'), (r.consentAt ? new Date(r.consentAt).toLocaleString('en-GB') : '—') + (r.termsVersion ? ` · v${r.termsVersion}` : '') + (r.guardianConsent ? L(' · guardian consented', ' · ผู้ปกครองยินยอม') : '')],
+    [L('Runner tag', 'ป้ายนักวิ่ง'), r.tagPrintedAt ? L('Printed ', 'พิมพ์แล้ว ') + new Date(r.tagPrintedAt).toLocaleString('en-GB') : L('Not printed', 'ยังไม่พิมพ์')]
   ];
   const acts = [];
   if (['awaiting_payment', 'verifying', 'expired'].includes(r.status)) acts.push(['confirm-payment', L('Confirm payment received', 'ยืนยันได้รับเงิน'), '']);
   if (r.status === 'paid' && !r.pickedUpAt) acts.push(['pickup', L('Hand over race pack', 'มอบ race pack'), '']);
   if (['awaiting_payment', 'verifying', 'paid'].includes(r.status)) acts.push(['cancel', L('Cancel entry', 'ยกเลิก'), 'ghost']);
   if (['cancelled', 'expired'].includes(r.status)) acts.push(['restore', L('Restore entry', 'คืนสถานะ'), 'ghost']);
+  if (r.status === 'paid') acts.push(['tag', L('Print runner tag', 'พิมพ์ป้ายนักวิ่ง'), 'ghost']);
   acts.push(['resend', L('Resend email', 'ส่งอีเมลอีกครั้ง'), 'ghost']);
   $('#modal').innerHTML = `<div style="display:flex;justify-content:space-between;gap:12px;align-items:start;flex-wrap:wrap">
       <div><div class="eyebrow" style="font-family:var(--mono)">${esc(r.ref)}</div><h3 id="mTitle" style="font-size:22px;margin:4px 0">${esc(r.firstName)} ${esc(r.lastName)}</h3>${stChip(r.status)}</div>
@@ -104,6 +107,7 @@ async function openDetail(ref) {
   $('#mClose').onclick = closeModal;
   document.querySelectorAll('#mActs [data-act]').forEach(b => b.onclick = () => {
     const act = b.dataset.act;
+    if (act === 'tag') return window.open(`/tags?refs=${encodeURIComponent(ref)}`, '_blank');
     if (act === 'cancel') { // irreversible-feeling action gets an in-page confirmation
       const c = $('#mConfirm'); c.hidden = false;
       c.innerHTML = `${L('Cancel this entry and release the spot?', 'ยกเลิกการสมัครนี้และคืนที่ว่าง?')} <button class="btn small" id="mYes">${L('Yes, cancel', 'ยืนยันยกเลิก')}</button>`;

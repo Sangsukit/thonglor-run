@@ -20,6 +20,12 @@ let selPack = '10K';
 let open = true;
 
 function thaiIdValid(id) { if (!/^\d{13}$/.test(id)) return false; let s = 0; for (let i = 0; i < 12; i++) s += +id[i] * (13 - i); return (11 - s % 11) % 10 === +id[12]; }
+// Runners under 18 need a parent or guardian to accept the terms; the box only shows for them.
+function updateGuardian() {
+  const dob = $('#dob').value, minor = !!dob && ageOnRaceDay(dob) < 18;
+  $('#guardianRow').hidden = !minor;
+  return minor;
+}
 function ageOnRaceDay(dob) { const d = new Date(dob), r = new Date('2026-11-15'); let a = r.getFullYear() - d.getFullYear(); if (r < new Date(r.getFullYear(), d.getMonth(), d.getDate())) a--; return a; }
 
 function renderPacks() {
@@ -146,7 +152,9 @@ function validate() {
   ok &= fieldErr('emName', v('emName') ? '' : req);
   ok &= fieldErr('emPhone', /^\+?\d{9,15}$/.test(v('emPhone').replace(/[\s()-]/g, '')) ? '' : L('Enter a phone number', 'กรอกเบอร์โทร'));
   const sh = document.querySelector('input[name=shirt]:checked'); $('#shirtErr').textContent = sh ? '' : L('Pick a shirt size', 'เลือกไซซ์เสื้อ'); ok &= !!sh;
-  const c = $('#waiver').checked && $('#pdpa').checked; $('#consentErr').textContent = c ? '' : L('Tick both boxes to continue', 'กรุณายอมรับเงื่อนไขทั้งสองข้อ'); ok &= c;
+  const minor = updateGuardian();
+  const c = $('#waiver').checked && $('#pdpa').checked && (!minor || $('#guardian').checked);
+  $('#consentErr').textContent = c ? '' : minor ? L('Tick all three boxes to continue', 'กรุณายอมรับเงื่อนไขทั้งสามข้อ') : L('Tick both boxes to continue', 'กรุณายอมรับเงื่อนไขทั้งสองข้อ'); ok &= c;
   return !!ok;
 }
 const SERVER_FIELD = { firstName: 'first', lastName: 'last', dateOfBirth: 'dob', idNumber: 'idNo', phone: 'phone', email: 'email', emergencyName: 'emName', emergencyPhone: 'emPhone' };
@@ -161,7 +169,8 @@ async function submit(e) {
     firstName: v('first'), lastName: v('last'), bibName: v('bibName'), gender: document.querySelector('input[name=gender]:checked').value,
     dateOfBirth: v('dob'), nationality: $('#nationality').value, idNumber: v('idNo'), phone: v('phone'), email: v('email'),
     emergencyName: v('emName'), emergencyPhone: v('emPhone'), medical: v('medical'),
-    shirtSize: document.querySelector('input[name=shirt]:checked').value, acceptWaiver: $('#waiver').checked, acceptPdpa: $('#pdpa').checked
+    shirtSize: document.querySelector('input[name=shirt]:checked').value, acceptWaiver: $('#waiver').checked, acceptPdpa: $('#pdpa').checked,
+    acceptGuardian: !$('#guardianRow').hidden && $('#guardian').checked
   };
   const btn = $('#submitBtn'); btn.disabled = true; const label = btn.innerHTML; btn.innerHTML = `<span class="spinner"></span> ${L('Saving your entry…', 'กำลังบันทึก…')}`;
   try {
@@ -200,6 +209,6 @@ window.onLangChange = () => { renderAll(); updateIdLabel(); };
 document.addEventListener('DOMContentLoaded', () => {
   renderAll(); loadStats(); loadShirts(); setupMbar(); requestAnimationFrame(centerSelectedPack);
   $('#nationality').onchange = updateIdLabel;
-  $('#dob').onchange = () => { const v = $('#dob').value; $('#ageHint').textContent = v ? L('Age on race day: ', 'อายุ ณ วันแข่ง: ') + ageOnRaceDay(v) : ''; };
+  $('#dob').onchange = () => { const v = $('#dob').value; $('#ageHint').textContent = v ? L('Age on race day: ', 'อายุ ณ วันแข่ง: ') + ageOnRaceDay(v) : ''; updateGuardian(); };
   $('#regForm').addEventListener('submit', submit);
 });

@@ -27,6 +27,9 @@ export const config = {
   shirtSizes: ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'],
   // Which shirt design from the deck to show runners: 1 = maroon/white, 2 = orange/white
   shirtDesign: env.SHIRT_DESIGN === '2' ? 2 : 1,
+  // Bump when /terms changes; each entry records the version the runner accepted.
+  termsVersion: '2026-10-14',
+  contactEmail: env.CONTACT_EMAIL || '',
 
   // Unpaid entries hold a spot for this many hours, then expire.
   holdHours: int(env.HOLD_HOURS, 24),

@@ -135,6 +135,38 @@ test('organizer desk: auth, list, confirm, pickup, export', async () => {
   assert.deepEqual(d.body.log.map(l => l.action), ['created', 'paid', 'picked_up']);
 });
 
+test('runner tags: paid entries only, filters, mark printed', async () => {
+  const a1 = (await register()).body;
+  const a2 = (await register({ pack: '5K', idNumber: thaiId(2), firstName: 'Krit' })).body;
+  await register({ idNumber: thaiId(3) }); // unpaid, never on a tag
+  await request(app).get('/api/admin/tags').expect(401);
+  const a = await admin();
+  for (const r of [a1, a2]) await a.post(`/api/admin/registrations/${r.ref}/confirm-payment`).send({}).expect(200);
+  const all = await a.get('/api/admin/tags').expect(200);
+  assert.deepEqual(all.body.items.map(i => i.bib), ['10001', '50001']);
+  assert.match(all.body.items[0].qr, /^<svg/);
+  const only5 = await a.get('/api/admin/tags?pack=5K').expect(200);
+  assert.deepEqual(only5.body.items.map(i => i.ref), [a2.ref]);
+  const m = await a.post('/api/admin/tags/printed').send({ refs: [a1.ref] }).expect(200);
+  assert.equal(m.body.marked, 1);
+  const left = await a.get('/api/admin/tags?unprinted=1').expect(200);
+  assert.deepEqual(left.body.items.map(i => i.ref), [a2.ref]);
+  const one = await a.get(`/api/admin/tags?refs=${a1.ref.toLowerCase()}`).expect(200);
+  assert.equal(one.body.items.length, 1); assert.ok(one.body.items[0].tagPrintedAt);
+});
+
+test('terms: version recorded; under-18s need guardian consent', async () => {
+  const kid = { dateOfBirth: '2012-03-01', idNumber: thaiId(4) };
+  const no = await register(kid).expect(422);
+  assert.ok(no.body.fields.acceptGuardian);
+  const ok = (await register({ ...kid, acceptGuardian: true }).expect(201)).body;
+  const a = await admin();
+  const d = await a.get(`/api/admin/registrations/${ok.ref}`).expect(200);
+  assert.equal(d.body.guardianConsent, true); assert.match(d.body.termsVersion, /^\d{4}-\d{2}-\d{2}$/);
+  const adult = (await register({ idNumber: thaiId(5) }).expect(201)).body;
+  assert.equal((await a.get(`/api/admin/registrations/${adult.ref}`)).body.guardianConsent, false);
+});
+
 test('unpaid entries expire and release their spot', async () => {
   const r = (await register()).body;
   await pool.query(`UPDATE registrations SET expires_at = now() - interval '1 minute' WHERE ref=$1`, [r.ref]);

@@ -60,13 +60,13 @@ export async function createRegistration(input, actor = 'public') {
         const { rows: [reg] } = await c.query(
           `INSERT INTO registrations (ref, access_token, pack, distance, price_thb, first_name, last_name, bib_name, gender,
              date_of_birth, nationality, id_number, phone, email, emergency_name, emergency_phone, medical, shirt_size,
-             expires_at, consent_at)
-           VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18, now() + make_interval(hours => $19), now())
+             expires_at, consent_at, terms_version, guardian_consent)
+           VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18, now() + make_interval(hours => $19), now(), $20, $21)
            RETURNING *`,
           [ref, newToken(), input.pack, distance, pack.price, input.firstName, input.lastName,
            (input.bibName || input.firstName).slice(0, 12).toUpperCase(), input.gender, input.dateOfBirth, input.nationality,
            input.idNumber, input.phone, input.email, input.emergencyName, input.emergencyPhone, input.medical || '',
-           input.shirtSize, config.holdHours]);
+           input.shirtSize, config.holdHours, config.termsVersion, !!input.acceptGuardian]);
         await audit(c, reg.id, 'created', actor);
         return reg;
       } catch (e) {
