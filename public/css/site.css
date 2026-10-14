@@ -484,3 +484,39 @@ html[lang=th] .terms .t-en, html:not([lang=th]) .terms .t-th{display:none}
 .terms a{color:var(--yellow)}
 .check a{color:var(--yellow)}
 footer a{color:inherit}
+
+/* Course map from the deck (Google Maps base): one map shows both loops, the lists sit beside it. */
+.routewrap{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:16px;align-items:start}
+.routewrap .routes{grid-template-columns:minmax(0,1fr)}
+.routemap{margin:0;background:#fff;border-radius:var(--r);overflow:hidden;border:1px solid var(--line)}
+.routemap img{display:block;width:100%;height:auto}
+.routemap figcaption{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;padding:10px 14px;background:var(--surface);font-size:13px;color:var(--muted)}
+.routemap .lg{display:inline-flex;align-items:center;gap:6px}
+.routemap .lg i{width:14px;height:14px;border-radius:50%;display:inline-block}
+.routemap .l10 i{background:#1662C4}
+.routemap .l5 i{background:#F5C518}
+.routemap .lsf i{background:#E4002B}
+.routemap figcaption a{margin-left:auto;color:var(--yellow)}
+@media (max-width:860px){.routewrap{grid-template-columns:minmax(0,1fr)}}
+
+/* Hero uses the event poster (Option 1 key visual) instead of a stock photo. */
+.vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.hero-photo{background:
+  linear-gradient(90deg,rgba(8,9,11,.9) 0%,rgba(8,9,11,.82) 50%,rgba(8,9,11,.9) 100%),
+  linear-gradient(0deg,var(--bg) 0%,rgba(11,12,14,0) 45%),
+  url('/img/poster.jpg') center 30%/cover no-repeat;filter:blur(18px) saturate(1.1);transform:scale(1.1)}
+.poster-hero{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center}
+.poster{margin:0;justify-self:center;width:100%;max-width:500px}
+.poster img{display:block;width:100%;height:auto;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.08)}
+.hero-side{display:flex;flex-direction:column;gap:14px}
+.hero-side .mega{font-size:clamp(34px,4.6vw,58px)}
+.hero-side .mega .sub{font-size:1em;margin:0}
+@media (max-width:860px){
+  .poster-hero{grid-template-columns:minmax(0,1fr)}
+  .poster{max-width:440px}
+  .hero-side .mega{font-size:clamp(30px,9vw,42px)}
+}
+/* Route cards use the map's line colours so numbers can be matched at a glance. */
+.route.r10K{--rc:#2F7BE0}
+.route.r5K{--rc:#F5C518}
+.route.r5K li.sf .dot{color:#111}

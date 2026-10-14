@@ -6,9 +6,10 @@ const PACKS = {
 };
 const INCL = { shirt: ['Event shirt', 'เสื้อที่ระลึก'], medal: ['Finisher medal', 'เหรียญที่ระลึก'], headband: ['VIP headband', 'ผ้าโพกหัว'], food: ['Post-run meal', 'อาหารหลังวิ่ง'] };
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
+// Waypoints numbered as on the course map (public/img/route-map.jpg): blue 1-9 for 10K, yellow 2-4 for 5K.
 const ROUTES = {
-  '10K': [['อุทยานเบญจสิริ', 'Benjasiri Park · start', 1], ['EM SPHERE', 'EmSphere'], ['สวนเบญจสิริ', 'Benjasiri Park'], ['ศูนย์สิริกิติ์', 'Queen Sirikit National Convention Center'], ['ถนนพระราม 4', 'Rama IV Road'], ['ถนนเอกมัย', 'Ekkamai Road'], ['ถนนเพชรบุรี', 'Phetchaburi Road'], ['ซอยทองหล่อ / สถานีตำรวจ', 'Soi Thonglor · Police station'], ['อุทยานเบญจสิริ', 'Benjasiri Park · finish', 1]],
-  '5K': [['อุทยานเบญจสิริ', 'Benjasiri Park · start', 1], ['สุขุมวิท 22', 'Sukhumvit 22'], ['ถนนพระราม 4', 'Rama IV Road'], ['สุขุมวิท 26', 'Sukhumvit 26'], ['อุทยานเบญจสิริ', 'Benjasiri Park · finish', 1]]
+  '10K': [['อุทยานเบญจสิริ', 'Benjasiri Park · start', 'S'], ['เอ็มสเฟียร์', 'EmSphere', 1], ['สวนเบญจกิติ / ศูนย์สิริกิติ์', 'Benjakitti Park · Queen Sirikit Centre', 2], ['ถนนพระราม 4', 'Rama IV Road', 3], ['แยกพระราม 4 - เอกมัย', 'Rama IV × Ekkamai', 4], ['ถนนเอกมัย', 'Ekkamai Road', 5], ['ถนนเพชรบุรี', 'Phetchaburi Road', 6], ['ซอยทองหล่อ', 'Soi Thonglor', 7], ['สถานีตำรวจนครบาลทองหล่อ', 'Thonglor Police Station', 8], ['ถนนสุขุมวิท', 'Sukhumvit Road', 9], ['อุทยานเบญจสิริ', 'Benjasiri Park · finish', 'F']],
+  '5K': [['อุทยานเบญจสิริ', 'Benjasiri Park · start', 'S'], ['สุขุมวิท 22', 'Sukhumvit 22', 2], ['ถนนพระราม 4', 'Rama IV Road', 3], ['สุขุมวิท 26', 'Sukhumvit 26', 4], ['อุทยานเบญจสิริ', 'Benjasiri Park · finish', 'F']]
 };
 const ICONS = {
   shirt: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M8 3l-5 3 2 4 2-1v12h10V9l2 1 2-4-5-3c-.5 1.5-2 2.5-4 2.5S8.5 4.5 8 3z"/></svg>',
@@ -75,8 +76,8 @@ function renderShirts() {
 let selRoute = '10K';
 function renderRoutes() {
   $('#routes').innerHTML = ['10K', '5K'].map(k => `
-    <div class="route ${k === selRoute ? 'active' : ''}" role="tabpanel" style="--rc:var(${packColor(k)})"><h3>${k === '10K' ? '10 KM' : '5 KM'}</h3>
-      <ol>${ROUTES[k].map((r, i) => `<li class="${r[2] ? 'sf' : ''}"><span class="dot">${r[2] ? (i === 0 ? 'S' : 'F') : i}</span><span>${L(r[1], r[0])}<small>${L(r[0], r[1])}</small></span></li>`).join('')}</ol></div>`).join('');
+    <div class="route r${k} ${k === selRoute ? 'active' : ''}" role="tabpanel"><h3>${k === '10K' ? '10 KM' : '5 KM'}</h3>
+      <ol>${ROUTES[k].map((r, i) => `<li class="${typeof r[2] === 'string' ? 'sf' : ''}"><span class="dot">${r[2]}</span><span>${L(r[1], r[0])}<small>${L(r[0], r[1])}</small></span></li>`).join('')}</ol></div>`).join('');
   document.querySelectorAll('[data-rt]').forEach(b => { b.setAttribute('aria-selected', b.dataset.rt === selRoute); b.onclick = () => { selRoute = b.dataset.rt; renderRoutes(); }; });
 }
 function renderCause() {
