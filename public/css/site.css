@@ -568,3 +568,4 @@ footer a{color:inherit}
 .route li.on .dot{background:var(--rc);color:#fff}
 .route.r5K li.on .dot{color:#111}
 @media (max-width:860px){.cmap{height:auto;aspect-ratio:1146/950;min-height:300px}}
+.cmap{isolation:isolate;z-index:0}
