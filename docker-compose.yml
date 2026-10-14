@@ -1,0 +1,28 @@
+# Local or single-server setup: `docker compose up -d`, then open http://localhost:3000
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: tgr
+      POSTGRES_PASSWORD: tgr
+      POSTGRES_DB: tgr
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tgr"]
+      interval: 5s
+      retries: 10
+    restart: unless-stopped
+  app:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://tgr:tgr@db:5432/tgr
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+volumes:
+  pgdata:

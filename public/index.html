@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Thonglor Charity Run 2026 · Register</title>
+<meta name="description" content="Register for the Thonglor Charity Run, Sunday 15 November 2026. 5K, 10K and VIP race packs. Every entry fee supports Thonglor police officers and their families.">
+<meta property="og:title" content="Thonglor Charity Run 2026">
+<meta property="og:description" content="Run with the police · 15 Nov 2026 · 5K / 10K / VIP">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600;1,700;1,800&family=Noto+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="/css/site.css">
+<script src="/js/common.js" defer></script>
+<script src="/js/site.js" defer></script>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/">THONGLOR <b>RUN</b></a>
+    <nav class="main" aria-label="Main">
+      <a href="/#packs" data-i18n="nav.packs">Race packs</a>
+      <a href="/#route" data-i18n="nav.route">Route</a>
+      <a href="/#register" data-i18n="nav.register">Register</a>
+      <a href="/my" data-i18n="nav.mine">My entries</a>
+      <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="en" aria-pressed="true">EN</button><button type="button" data-lang="th" aria-pressed="false">ไทย</button></div>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <section class="hero" id="top">
+    <div class="hero-photo" aria-hidden="true"></div>
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow" data-i18n="hero.eyebrow">Run with the police · Thonglor Police Station</div>
+        <h1 class="mega"><span>Thonglor Run</span><span class="sub">Run with <em>the police</em></span></h1>
+        <div class="sign" aria-hidden="true"><span class="th">ซอยทองหล่อ</span><span class="en">THONG LO</span></div>
+      </div>
+      <aside class="facts" aria-label="Race day">
+        <div class="date"><span class="d">15</span><span class="m">NOV 2026</span><span class="dow" data-i18n="hero.dow">Sunday</span></div>
+        <div class="factrow"><span class="k" data-i18n="hero.start">Start</span><span class="num"><b>06:00</b></span></div>
+        <div class="factrow"><span class="k" data-i18n="hero.where">Start / finish</span><span data-i18n="venue">Benjasiri Park (อุทยานเบญจสิริ), Sukhumvit</span></div>
+        <div class="factrow"><span class="k" data-i18n="hero.dist">Distances</span><span>5 KM · 10 KM</span></div>
+        <div class="meter">
+          <div class="lbl"><span data-i18n="hero.spots">Spots left</span><span class="num"><b id="spotsLeft">3,000</b> / 3,000</span></div>
+          <div class="bar"><i id="spotsBar"></i></div>
+        </div>
+        <a class="btn" href="#register" data-i18n="hero.cta">Register now</a>
+      </aside>
+    </div>
+    <div class="wrap tagline">
+      <span><mark>เพราะเมืองที่ปลอดภัย เริ่มจากการก้าวไปด้วยกัน</mark></span>
+      <span data-i18n="hero.tag">Every entry fee goes to the welfare fund for Thonglor police officers and their families.</span>
+    </div>
+  </section>
+
+  <div class="ribbon"><div class="wrap"><span class="script">Run together · Trust together</span><span class="th">ทุกก้าว เคียงข้างประชาชน</span></div></div>
+
+  <section class="block" id="packs">
+    <div class="wrap">
+      <div class="head"><div><div class="eyebrow" data-i18n="packs.eyebrow">Step 1</div><h2 data-i18n="packs.title">Choose your race pack</h2></div></div>
+      <div class="packs" id="packList"></div>
+    </div>
+  </section>
+
+  <section class="block" id="register">
+    <div class="wrap">
+      <div class="head"><div><div class="eyebrow" data-i18n="reg.eyebrow">Entry form</div><h2 data-i18n="reg.title">Register</h2>
+        <p data-i18n="reg.lead">Fill in details exactly as they appear on your ID card or passport. Your bib number is issued as soon as your payment goes through.</p></div></div>
+      
+      <div class="panel" id="regPanel">
+        <div class="chosen" id="chosen"></div>
+        <form id="regForm" novalidate>
+          <div class="formsec" id="vipDist" hidden>
+            <fieldset><legend data-i18n="f.vipdist">VIP distance</legend>
+              <div class="seg"><label><input type="radio" name="vipDistance" value="10K" checked> 10 KM</label><label><input type="radio" name="vipDistance" value="5K"> 5 KM</label></div>
+            </fieldset>
+          </div>
+          <div class="formsec"><fieldset><legend data-i18n="f.runner">Runner</legend>
+            <div class="grid2">
+              <div class="field"><label for="first" data-i18n="f.first">First name</label><input type="text" id="first" autocomplete="given-name" required><div class="err"></div></div>
+              <div class="field"><label for="last" data-i18n="f.last">Last name</label><input type="text" id="last" autocomplete="family-name" required><div class="err"></div></div>
+              <div class="field"><label for="bibName" data-i18n="f.bibname">Name on bib</label><input type="text" id="bibName" maxlength="12"><div class="hint" data-i18n="f.bibhint">Up to 12 characters. Leave blank to use your first name.</div></div>
+              <div class="field"><span class="lab" data-i18n="f.gender">Gender</span>
+                <div class="seg" id="gender"><label><input type="radio" name="gender" value="M"> <span data-i18n="g.m">Male</span></label><label><input type="radio" name="gender" value="F"> <span data-i18n="g.f">Female</span></label><label><input type="radio" name="gender" value="X"> <span data-i18n="g.x">Not specified</span></label></div><div class="err"></div></div>
+              <div class="field"><label for="dob" data-i18n="f.dob">Date of birth</label><input type="date" id="dob" required max="2016-11-15"><div class="hint" id="ageHint"></div><div class="err"></div></div>
+              <div class="field"><label for="nationality" data-i18n="f.nat">Nationality</label><select id="nationality"><option value="TH" data-i18n="n.th">Thai</option><option value="OTHER" data-i18n="n.other">Other</option></select></div>
+              <div class="field full"><label for="idNo" id="idLabel" data-i18n="f.idth">Thai ID card number (13 digits)</label><input type="text" id="idNo" inputmode="numeric" autocomplete="off" required><div class="err"></div></div>
+            </div></fieldset></div>
+          <div class="formsec"><fieldset><legend data-i18n="f.contact">Contact</legend>
+            <div class="grid2">
+              <div class="field"><label for="phone" data-i18n="f.phone">Mobile number</label><input type="tel" id="phone" autocomplete="tel" placeholder="08x xxx xxxx" required><div class="err"></div></div>
+              <div class="field"><label for="email" data-i18n="f.email">Email</label><input type="email" id="email" autocomplete="email" required><div class="hint" data-i18n="f.emailhint">Your confirmation and e-ticket are sent here.</div><div class="err"></div></div>
+              <div class="field"><label for="emName" data-i18n="f.emname">Emergency contact name</label><input type="text" id="emName" required><div class="err"></div></div>
+              <div class="field"><label for="emPhone" data-i18n="f.emphone">Emergency contact phone</label><input type="tel" id="emPhone" required><div class="err"></div></div>
+              <div class="field full"><label for="medical" data-i18n="f.medical">Medical conditions, allergies or medication (optional)</label><textarea id="medical"></textarea></div>
+            </div></fieldset></div>
+          <div class="formsec"><fieldset><legend data-i18n="f.shirt">Event shirt size</legend>
+            <div class="seg" id="shirtSeg"></div><div class="err" id="shirtErr"></div>
+            <div class="sizes"><table aria-label="Shirt size chart"><thead><tr><th data-i18n="f.size">Size</th><th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>2XL</th><th>3XL</th></tr></thead>
+              <tbody><tr><td data-i18n="f.chest">Chest (in)</td><td>34</td><td>36</td><td>38</td><td>40</td><td>42</td><td>44</td><td>46</td></tr>
+              <tr><td data-i18n="f.length">Length (in)</td><td>25</td><td>26</td><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td></tr></tbody></table></div>
+          </fieldset></div>
+          <div class="formsec">
+            <label class="check"><input type="checkbox" id="waiver"><span data-i18n="f.waiver">I am in good health to take part and accept that I run at my own risk. I will follow the instructions of race officials and police on the course.</span></label>
+            <label class="check"><input type="checkbox" id="pdpa"><span data-i18n="f.pdpa">I consent to the organizer storing my personal data for this event only, in line with the Personal Data Protection Act (PDPA).</span></label>
+            <div class="err" id="consentErr"></div>
+          </div>
+          <div class="notice bad" id="formError" hidden></div>
+          <div class="actions"><a class="btn ghost" href="#packs" data-i18n="f.back">Change race pack</a><button class="btn" type="submit" id="submitBtn" data-i18n="f.submit">Register and continue to payment</button></div>
+        </form>
+        
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="route">
+    <div class="wrap">
+      <div class="head"><div><div class="eyebrow" data-i18n="route.eyebrow">Course</div><h2 data-i18n="route.title">The route</h2>
+        <p data-i18n="route.lead">Both courses start and finish at the same park and run past Thonglor Police Station's neighbourhood. Roads are closed and marshalled by police officers.</p></div></div>
+      <div class="routes" id="routes"></div>
+    </div>
+  </section>
+
+  <section class="block" id="cause">
+    <div class="wrap cause">
+      <div><div class="eyebrow" data-i18n="cause.eyebrow">Where your entry fee goes</div><h2 data-i18n="cause.title">Look after those who look after us</h2>
+        <p class="quote" style="margin-top:18px">หนึ่งเส้นทาง <mark>หนึ่งทีมเดียวกัน</mark></p></div>
+      <ul id="causeList"></ul>
+    </div>
+    <div class="wrap"><div class="pillars" id="pillars"></div></div>
+  </section>
+
+  <section class="block" id="sponsors">
+    <div class="wrap">
+      <div class="head"><div><div class="eyebrow" data-i18n="sp.eyebrow">Partners</div><h2 data-i18n="sp.title">Sponsor the run</h2></div></div>
+      <div class="spons" id="sponList"></div>
+    </div>
+  </section>
+  <footer><div class="wrap"><span data-i18n="footer">Thonglor Charity Run 2026 · Organised with Thonglor Metropolitan Police Station · Produced by MI6 Bangkok</span><img src="/img/mi6-bangkok.png" alt="MI6 Bangkok" width="60" height="38"></div></footer>
+</main>
+
+</body>
+</html>

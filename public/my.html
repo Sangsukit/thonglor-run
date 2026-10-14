@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600;1,700;1,800&family=Noto+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="/css/site.css">
+<script src="/js/common.js" defer></script>
+<script src="/js/my.js" defer></script>
+<meta name="robots" content="noindex">
+<title>My entries · Thonglor Charity Run 2026</title>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/">THONGLOR <b>RUN</b></a>
+    <nav class="main" aria-label="Main">
+      <a href="/#packs" data-i18n="nav.packs">Race packs</a>
+      <a href="/#route" data-i18n="nav.route">Route</a>
+      <a href="/#register" data-i18n="nav.register">Register</a>
+      <a href="/my" data-i18n="nav.mine">My entries</a>
+      <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="en" aria-pressed="true">EN</button><button type="button" data-lang="th" aria-pressed="false">ไทย</button></div>
+    </nav>
+  </div>
+</header>
+<main>
+  <section class="block" style="border-top:0">
+    <div class="wrap">
+      <div class="head"><div><div class="eyebrow" data-i18n="mine.eyebrow">Your e-tickets</div><h2 data-i18n="mine.title">My entries</h2></div>
+        <a class="btn" href="/#register" data-i18n="mine.add">Register another runner</a></div>
+      <div id="list"></div>
+      <div class="panel" style="margin-top:22px;max-width:560px">
+        <h3 style="font-size:18px;margin-bottom:6px" id="resendTitle">Registered on another device?</h3>
+        <p class="lede" style="margin:0 0 12px" id="resendLead">Enter the email you registered with and we'll send your entry links again.</p>
+        <form id="resend" class="toolbar" novalidate>
+          <input type="email" id="resendEmail" placeholder="you@example.com" aria-label="Email" required autocomplete="email">
+          <button class="btn" type="submit" id="resendBtn">Send my links</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+</body>
+</html>
